@@ -398,7 +398,7 @@ describe('Initiate Connect Test', function() {
 });
 
 
-describe('Ntlm Test', function() {
+describe.skip('Ntlm Test', function() {
   /**
    * @enum {number}
    */
