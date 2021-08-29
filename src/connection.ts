@@ -15,6 +15,7 @@ import {
   MSIAppServiceTokenCredentials,
   ApplicationTokenCredentials
 } from '@azure/ms-rest-nodeauth';
+import { ManagedIdentityCredential } from '@azure/identity';
 
 import BulkLoad, { Options as BulkLoadOptions, Callback as BulkLoadCallback } from './bulk-load';
 import Debug from './debug';
@@ -3732,19 +3733,26 @@ Connection.prototype.STATE = {
                 );
 
                 getTokenFromCredentials(undefined, credentials);
-              } else if (authentication.type === 'azure-active-directory-msi-vm') {
-                loginWithVmMSI({
-                  clientId: authentication.options.clientId,
-                  msiEndpoint: authentication.options.msiEndpoint,
-                  resource: fedAuthInfoToken.spn
-                }, getTokenFromCredentials);
-              } else if (authentication.type === 'azure-active-directory-msi-app-service') {
-                loginWithAppServiceMSI({
-                  msiEndpoint: authentication.options.msiEndpoint,
-                  msiSecret: authentication.options.msiSecret,
-                  resource: fedAuthInfoToken.spn,
-                  clientId: authentication.options.clientId
-                }, getTokenFromCredentials);
+              } else if (authentication.type === 'azure-active-directory-msi-vm' || authentication.type === 'azure-active-directory-msi-app-service') {
+                const msiArgs = authentication.options.clientId ? [ authentication.options.clientId, {} ] : [ {} ];
+                const credential = new ManagedIdentityCredential(...msiArgs);
+
+                if (authentication.options.msiEndpoint) {
+                  process.env.IDENTITY_ENDPOINT = authentication.options.msiEndpoint;
+                  process.env.MSI_ENDPOINT = authentication.options.msiEndpoint;
+                }
+
+                if (authentication.type === 'azure-active-directory-msi-app-service' && authentication.options.msiSecret) {
+                  process.env.MSI_SECRET = authentication.options.msiSecret;
+                }
+
+                credential.getToken([ fedAuthInfoToken.spn! ]).then((tokenResponse) => {
+                  if (tokenResponse) {
+                    callback(null, tokenResponse.token);
+                  } else {
+                    callback(new Error('MSI token credentials unavailable'));
+                  }
+                }, callback);
               } else if (authentication.type === 'azure-active-directory-service-principal-secret') {
                 const credentials = new ApplicationTokenCredentials(
                   authentication.options.clientId,
