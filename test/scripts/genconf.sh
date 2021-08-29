@@ -16,10 +16,10 @@ cat >"${HOME}/.tedious/test-connection.json" <<EOF
       "database": "test",
       "trustServerCertificate": true,
       "debug": {
-        data: true,
-        packet: true,
-        payload: true,
-        token: true
+        "data": true,
+        "packet": true,
+        "payload": true,
+        "token": true
       }
     }
   }
