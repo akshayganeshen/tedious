@@ -44,7 +44,7 @@ function getNtlmConfig() {
   ).ntlm;
 }
 
-describe.only('Initiate Connect Test', function() {
+describe('Initiate Connect Test', function() {
   this.timeout(20000);
 
   it('should be bad server', function(done) {
@@ -468,7 +468,7 @@ describe.skip('Ntlm Test', function() {
   });
 });
 
-describe.only('Encrypt Test', function() {
+describe('Encrypt Test', function() {
   it('should encrypt', function(done) {
     const config = getConfig();
     config.options.encrypt = true;
@@ -505,7 +505,7 @@ describe.only('Encrypt Test', function() {
   });
 });
 
-describe.only('BeginTransaction Tests', function() {
+describe('BeginTransaction Tests', function() {
   /** @type {Connection} */
   let connection;
   beforeEach(function(done) {
@@ -545,7 +545,7 @@ describe.only('BeginTransaction Tests', function() {
   });
 });
 
-describe.only('Insertion Tests', function() {
+describe('Insertion Tests', function() {
   this.timeout(30000);
 
   it('should execSql', function(done) {
@@ -1270,7 +1270,7 @@ describe.only('Insertion Tests', function() {
   });
 });
 
-describe.only('Advanced Input Test', function() {
+describe('Advanced Input Test', function() {
   /**
    * @param {Mocha.Done} done
    * @param {import("../../src/connection").ConnectionConfiguration} config
@@ -1326,7 +1326,7 @@ describe.only('Advanced Input Test', function() {
   });
 });
 
-describe.only('Date Insert Test', function() {
+describe('Date Insert Test', function() {
   /**
    * @param {Mocha.Done} done
    * @param {number | undefined} datefirst
@@ -1381,7 +1381,7 @@ describe.only('Date Insert Test', function() {
   });
 });
 
-describe.only('Language Insert Test', function() {
+describe('Language Insert Test', function() {
   /**
    * @param {Mocha.Done} done
    * @param {string | undefined} language
@@ -1423,7 +1423,7 @@ describe.only('Language Insert Test', function() {
   });
 });
 
-describe.only('custom textsize value', function() {
+describe('custom textsize value', function() {
   it('should set the textsize to the given value', function(done) {
     const config = getConfig();
     config.options.textsize = 123456;
@@ -1611,7 +1611,7 @@ describe.only('custom textsize value', function() {
   });
 });
 
-describe.only('should test date format', function() {
+describe('should test date format', function() {
   /**
    * @param {Mocha.Done} done
    * @param {string | undefined} dateFormat
